@@ -5,7 +5,6 @@ import AboutPage from "./pages/AboutPage.tsx";
 import PostListPage from "./pages/PostListPage.tsx";
 import PostDetailPage from "./pages/PostDetailPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
-import "./App.css"
 
 function App() {
   return (

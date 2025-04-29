@@ -1,0 +1,77 @@
+.about-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.about-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.about-title {
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.about-content {
+  line-height: 1.8;
+  font-size: 1.1rem;
+}
+
+.about-section {
+  margin-bottom: 2.5rem;
+}
+
+.about-section-title {
+  font-size: 1.8rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 0.5rem;
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.team-member {
+  text-align: center;
+}
+
+.team-member-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0.5rem 0;
+  color: #2c3e50;
+}
+
+.team-member-role {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .about-container {
+    padding: 1.5rem;
+    margin: 0;
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  .about-title {
+    font-size: 2rem;
+  }
+
+  .team-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1.5rem;
+  }
+}
