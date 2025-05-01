@@ -8,14 +8,12 @@ import PostDetailPage, { loader as postLoader } from "./pages/PostDetailPage.tsx
 import NotFoundPage from "./pages/NotFoundPage.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import RegisterPage from "./pages/RegisterPage.tsx";
+import LoadingSpinner from "./components/LoadingSpinner.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout/>,
-    loader: async () => {
-      return axios.get("/api/posts");
-    },
     children: [
       {
         index: true,
@@ -35,7 +33,13 @@ const router = createBrowserRouter([
       },
       {
         path: "posts",
-        element: <PostListPage/>
+        element: <PostListPage/>,
+        hydrateFallbackElement: <LoadingSpinner/>,
+        loader: async () => {
+          await new Promise(resolve => setTimeout(resolve, 1500));
+          const response = await axios.get("/api/posts");
+          return { posts: response.data };
+        },
       },
       {
         path: "posts/:slug",
