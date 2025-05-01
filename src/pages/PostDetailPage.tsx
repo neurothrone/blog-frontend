@@ -4,6 +4,8 @@ import CommentsList from "../components/CommentsList.tsx";
 import posts from "../data/posts";
 import "./PostDetail.css";
 import { useState } from "react";
+import AddCommentForm from "../components/AddCommentForm.tsx";
+import Comment from "../types/comment.ts";
 
 export async function loader({ params }) {
   const response = await axios.get(`/api/posts/${params.slug}`);
@@ -13,8 +15,9 @@ export async function loader({ params }) {
 
 const PostDetailPage = () => {
   const { slug } = useParams();
-  const { upvotes: initialUpvotes, comments } = useLoaderData();
+  const { upvotes: initialUpvotes, comments: initialComments } = useLoaderData();
   const [upvotes, setUpvotes] = useState(initialUpvotes);
+  const [comments, setComments] = useState(initialComments);
   const post = posts.find(post => post.slug === slug);
 
   if (!post) {
@@ -30,6 +33,12 @@ const PostDetailPage = () => {
     const response = await axios.post(`/api/posts/${slug}/upvote`);
     const updatedPost = response.data;
     setUpvotes(updatedPost.upvotes);
+  }
+
+  async function addComment(comment: Comment) {
+    const response = await axios.post(`/api/posts/${slug}/comments`, comment);
+    const updatedPost = response.data;
+    setComments(updatedPost.comments);
   }
 
   return (
@@ -49,6 +58,7 @@ const PostDetailPage = () => {
         ))}
       </div>
 
+      <AddCommentForm onAddComment={addComment}/>
       <CommentsList comments={comments}/>
 
       <div className="post-navigation">
