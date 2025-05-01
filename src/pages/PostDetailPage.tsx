@@ -1,4 +1,4 @@
-import { useParams, Link, useLoaderData } from "react-router";
+import { useParams, Link, useLoaderData, LoaderFunctionArgs } from "react-router";
 import axios from "axios";
 import CommentsList from "../components/CommentsList.tsx";
 import posts from "../data/posts";
@@ -7,7 +7,12 @@ import { useState } from "react";
 import AddCommentForm from "../components/AddCommentForm.tsx";
 import Comment from "../types/comment.ts";
 
-export async function loader({ params }) {
+interface LoaderData {
+  upvotes: number;
+  comments: Comment[];
+}
+
+export async function loader({ params }: LoaderFunctionArgs) {
   const response = await axios.get(`/api/posts/${params.slug}`);
   const { upvotes, comments } = response.data;
   return { upvotes, comments };
@@ -15,7 +20,7 @@ export async function loader({ params }) {
 
 const PostDetailPage = () => {
   const { slug } = useParams();
-  const { upvotes: initialUpvotes, comments: initialComments } = useLoaderData();
+  const { upvotes: initialUpvotes, comments: initialComments } = useLoaderData<LoaderData>();
   const [upvotes, setUpvotes] = useState(initialUpvotes);
   const [comments, setComments] = useState(initialComments);
   const post = posts.find(post => post.slug === slug);
