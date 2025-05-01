@@ -1,9 +1,20 @@
-import { useParams, Link } from "react-router";
+import { useParams, Link, useLoaderData } from "react-router";
+import axios from "axios";
+import CommentsList from "../components/CommentsList.tsx";
 import posts from "../data/posts";
 import "./PostDetail.css";
+import { useState } from "react";
+
+export async function loader({ params }) {
+  const response = await axios.get(`/api/posts/${params.slug}`);
+  const { upvotes, comments } = response.data;
+  return { upvotes, comments };
+}
 
 const PostDetailPage = () => {
   const { slug } = useParams();
+  const { upvotes: initialUpvotes, comments } = useLoaderData();
+  const [upvotes, setUpvotes] = useState(initialUpvotes);
   const post = posts.find(post => post.slug === slug);
 
   if (!post) {
@@ -15,6 +26,12 @@ const PostDetailPage = () => {
   const prevPost = currentIndex > 0 ? posts[currentIndex - 1] : null;
   const nextPost = currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
 
+  async function upvote() {
+    const response = await axios.post(`/api/posts/${slug}/upvote`);
+    const updatedPost = response.data;
+    setUpvotes(updatedPost.upvotes);
+  }
+
   return (
     <article className="post-detail">
       <header className="post-detail-header">
@@ -22,6 +39,8 @@ const PostDetailPage = () => {
         <div className="post-detail-meta">
           Published on {new Date().toLocaleDateString()}
         </div>
+        <p>This post has {upvotes} upvotes.</p>
+        <button onClick={upvote}>Upvote</button>
       </header>
 
       <div className="post-detail-content">
@@ -29,6 +48,8 @@ const PostDetailPage = () => {
           <p key={index}>{paragraph}</p>
         ))}
       </div>
+
+      <CommentsList comments={comments}/>
 
       <div className="post-navigation">
         {prevPost ? (
