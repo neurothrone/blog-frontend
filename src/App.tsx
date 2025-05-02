@@ -36,7 +36,6 @@ const router = createBrowserRouter([
         element: <PostListPage/>,
         hydrateFallbackElement: <LoadingSpinner/>,
         loader: async () => {
-          await new Promise(resolve => setTimeout(resolve, 1500));
           const response = await axios.get("/api/posts");
           return { posts: response.data };
         },
